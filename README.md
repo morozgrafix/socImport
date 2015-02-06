@@ -7,7 +7,7 @@ Use these free IFTTT recipes to send your social media posts to a folder in Drop
 <br>Facebook Photo Posts - https://ifttt.com/recipes/244050-day-one-import-facebook-photo-posts
 <br>Facebook Text Posts - https://ifttt.com/recipes/242576-day-one-facebook-to-text-in-dropbox
 <br>Twitter Posts - https://ifttt.com/recipes/242574-day-one-tweets-to-text-in-dropbox
-<br>Instagram Posts - https://ifttt.com/recipes/242577-day-one-instagram-to-text-in-dropbox
+<br>Instagram Posts - https://ifttt.com/recipes/255969-day-one-instagram-to-text-in-dropbox
 
 Then, save the socImport.bash script to a folder on your Mac; I suggest in a folder called /Users/yourname/socImport .
 <br>Make sure it's executable by you.

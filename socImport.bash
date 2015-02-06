@@ -5,16 +5,19 @@
 # Day One journal posts.
 # 1/18/15 Script created
 # 1/19/15 Added Facebook photo post import
+# 2/6/15 modified instagram logic to include link to original post on instagram
 
-thisUser="suzy" # Change to the user on your computer that has DropBox mounted.
+
+thisUser=$(whoami) # Change to the user on your computer that has DropBox mounted.
 socDir="/Users/${thisUser}/Dropbox/Apps/Day One/Incoming"
-thisDir="/Users/suzy/socImport" # Directory where this script is running from
+# thisDir="/Users/${thisUser}/localDev/socImport" # Directory where this script is running from
+thisDir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 if ls "${socDir}"/*.txt > /dev/null 2>&1 ; then
   ls "${socDir}"/*.txt > ${thisDir}/txtlist.socImport
   ls "${socDir}"/completed >/dev/null 2>&1 || mkdir "${socDir}"/completed 2> /dev/null
   while read thisFile ; do
-    #printf "\n${thisFile}\n"
+    # printf "\n${thisFile}\n"
     dayLine=`head -1 "${thisFile}"`
     thisMon=`echo ${dayLine} | cut -d" " -f1`
     thisMonth=`date -v "${thisMon}" +%m`
@@ -32,21 +35,25 @@ if ls "${socDir}"/*.txt > /dev/null 2>&1 ; then
       "facebookphoto")
         echo "This is a Facebook photo post."
         postText=`tail -n +3 "${thisFile}"`
+
         postLink=`tail -n +2 "${thisFile}" | head -1`
+
         #photoLink=`curl -s ${postLink}`
         photoLink=`curl -s ${postLink} | grep "^<a href" | sed 's/\"/~/g' | cut -d"~" -f2 | cut -d"?" -f1`
 echo "PHOTOLINK: ${photoLink}"
         curl -s ${photoLink} -o ${thisDir}/photo.jpg
         printf "Facebook Post \n<img src=${photoLink} width=640> \n${postText} \n \nImported from Facebook.\n" | /usr/local/bin/dayone -d="${postDate}" -p="${thisDir}/photo.jpg" new > /dev/null && mv "${thisFile}" "${socDir}"/completed && rm "${thisDir}/photo.jpg"
         ;;
-      "inst")
+      "instagram")
         #echo "This is an Instagram post."
-        postText=`tail -n +3 "${thisFile}"`
+        postText=`tail -n +4 "${thisFile}"`
+        photoLink=`tail -n +3 "${thisFile}" | head -1`
         postLink=`tail -n +2 "${thisFile}" | head -1`
-        photoLink=`curl -s ${postLink} | grep "^<a href" | sed 's/\"/~/g' | cut -d"~" -f2`
+        postLink=`curl -s ${postLink} | grep "^<a href" | sed 's/\"/~/g' | cut -d"~" -f2`
+        photoLink=`curl -s ${photoLink} | grep "^<a href" | sed 's/\"/~/g' | cut -d"~" -f2`
         curl -s ${photoLink} -o ${thisDir}/photo.jpg
         #printf "${postText}\n\n"
-        printf "Instagram Post \n${postText} \n \nImported from Instagram.\n" | /usr/local/bin/dayone -d="${postDate}" -p="${thisDir}/photo.jpg" new > /dev/null && mv "${thisFile}" "${socDir}"/completed && rm "${thisDir}/photo.jpg"
+        printf "Instagram Post \n${postText} \n \nImported from [Instagram](${postLink}).\n" | /usr/local/bin/dayone -d="${postDate}" -p="${thisDir}/photo.jpg" new > /dev/null && mv "${thisFile}" "${socDir}"/completed && rm "${thisDir}/photo.jpg"
         ;;
       "twit")
         #echo "This is a twitter post."
