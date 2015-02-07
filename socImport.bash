@@ -16,7 +16,7 @@ if ls "${socDir}"/*.txt > /dev/null 2>&1 ; then
   ls "${socDir}"/*.txt > ${thisDir}/txtlist.socImport
   ls "${socDir}"/completed >/dev/null 2>&1 || mkdir "${socDir}"/completed 2> /dev/null
   while read thisFile ; do
-    # printf "\n${thisFile}\n"
+    #printf "\n${thisFile}\n"
     dayLine=`head -1 "${thisFile}"`
     thisMon=`echo ${dayLine} | cut -d" " -f1`
     thisMonth=`date -v "${thisMon}" +%m`
@@ -34,9 +34,7 @@ if ls "${socDir}"/*.txt > /dev/null 2>&1 ; then
       "facebookphoto")
         echo "This is a Facebook photo post."
         postText=`tail -n +3 "${thisFile}"`
-
         postLink=`tail -n +2 "${thisFile}" | head -1`
-
         #photoLink=`curl -s ${postLink}`
         photoLink=`curl -s ${postLink} | grep "^<a href" | sed 's/\"/~/g' | cut -d"~" -f2 | cut -d"?" -f1`
 echo "PHOTOLINK: ${photoLink}"
