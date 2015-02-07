@@ -8,10 +8,9 @@
 # 2/6/15 modified instagram logic to include link to original post on instagram
 
 
-thisUser=$(whoami) # Change to the user on your computer that has DropBox mounted.
+thisUser=$(whoami) # User running the script.
 socDir="/Users/${thisUser}/Dropbox/Apps/Day One/Incoming"
-# thisDir="/Users/${thisUser}/localDev/socImport" # Directory where this script is running from
-thisDir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+thisDir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd ) # Directory where this script is running from
 
 if ls "${socDir}"/*.txt > /dev/null 2>&1 ; then
   ls "${socDir}"/*.txt > ${thisDir}/txtlist.socImport
